@@ -1,43 +1,29 @@
 package com.example.laramobile.activitys
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
+
+import android.widget.Space
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.example.laramobile.ui.theme.LaraMobileTheme
-
-class Login : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            Loginn()
-        }
-    }
-}
+import androidx.compose.ui.unit.sp
 
 @Composable
-fun Loginn(){
+fun LoginScreen(navigateToHome:() -> Unit){
 
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        content = { innerPadding ->
-            Column(
-                modifier = Modifier
-                    .padding(innerPadding)
-                    .fillMaxSize()
-            ) {
-                Text("saaaaaaaaaaaaaaaaaa")
-            }
+    Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
+        Spacer(modifier = Modifier.weight(1f))
+        Text(text = "Login Screen", fontSize = 25.sp)
+        Spacer(modifier = Modifier.weight(1f))
+        Button(onClick = {navigateToHome()}) {
+            Text("Navegar Al main")
         }
-    )
+        Spacer(modifier = Modifier.weight(1f))
+
+    }
 
 }
-
-

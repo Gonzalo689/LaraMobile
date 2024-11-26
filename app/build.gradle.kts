@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.jetbrainsKotlinSerialization)
 }
 
 android {
@@ -42,7 +43,8 @@ android {
 dependencies {
     implementation (libs.retrofit)
     implementation (libs.converter.gson)
-    implementation (libs.androidx.navigation.compose) // Verifica la última versión
+    implementation (libs.androidx.navigation.compose)
+    implementation(libs.kotlinx.serialization.json)
 
 
     implementation(libs.androidx.core.ktx)

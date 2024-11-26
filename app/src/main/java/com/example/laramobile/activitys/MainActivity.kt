@@ -26,6 +26,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.laramobile.api.RetrofitInstance
 import com.example.laramobile.api.model.Usuario
+import com.example.laramobile.navigation.NavigationWrapper
 import com.example.laramobile.ui.theme.LaraMobileTheme
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -38,14 +39,15 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             LaraMobileTheme {
-                AppNavigation()
+                NavigationWrapper()
+//                AppNavigation()
             }
         }
     }
 }
 
 @Composable
-fun PostList(navController: NavController){
+fun HomeScreen(){
     var fraseTag by remember { mutableStateOf<List<String>>(emptyList()) }
     var users by remember { mutableStateOf<List<Usuario>>(emptyList()) }
     var isLoading by remember { mutableStateOf(true) }
@@ -80,13 +82,10 @@ fun PostList(navController: NavController){
                             modifier = Modifier.weight(1f)
                         ) {
                             items(fraseTag.zip(users)) { (tag, user) ->
-                                PostItem(tag = tag, user = user, onClick = {
-                                    navController.navigate("loginScreen")
-                                })
+                                PostItem(tag = tag, user = user)
                             }
                         }
-                        // Botón al final
-                        NavigateToLoginButton()
+
                     }
                 }
             }
@@ -97,24 +96,6 @@ fun PostList(navController: NavController){
 }
 
 
-@Composable
-fun AppNavigation() {
-    val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "postList") {
-        composable("postList") { PostList(navController) }
-        composable("loginScreen") { Login() }
-    }
-}
-@Composable
-fun NavigateToLoginButton() {
-    val context = LocalContext.current
-    Button(onClick = {
-        val intent = Intent(context, Login::class.java) // Especifica la actividad de destino
-        context.startActivity(intent)
-    }) {
-        Text("Ir a Login")
-    }
-}
 @Composable
 fun LoadingIndicator() {
     Text(text = "Loading...", modifier = Modifier.padding(16.dp))
@@ -127,11 +108,10 @@ fun ErrorMessage(message: String) {
 
 
 @Composable
-fun PostItem(tag: String, user: Usuario, onClick: () -> Unit) {
+fun PostItem(tag: String, user: Usuario) {
     Column(
         modifier = Modifier
             .padding(16.dp)
-            .clickable { onClick() }
     ) {
         Text(
             text = "Tag: $tag",
