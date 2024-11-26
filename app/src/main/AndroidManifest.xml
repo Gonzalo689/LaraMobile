@@ -12,6 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LaraMobile"
         tools:targetApi="31">
+        <activity android:name=".activitys.Login" />
         <activity
             android:name=".activitys.MainActivity"
             android:exported="true"

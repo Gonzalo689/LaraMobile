@@ -42,6 +42,8 @@ android {
 dependencies {
     implementation (libs.retrofit)
     implementation (libs.converter.gson)
+    implementation (libs.androidx.navigation.compose) // Verifica la última versión
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

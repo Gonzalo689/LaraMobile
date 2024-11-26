@@ -9,11 +9,13 @@ espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.6.1"
 activityCompose = "1.9.3"
 composeBom = "2024.04.01"
+navigationCompose = "2.8.4"
 retrofit = "2.9.0"
 protoliteWellKnownTypes = "18.0.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
