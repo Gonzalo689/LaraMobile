@@ -31,7 +31,6 @@ fun HomeScreen(){
     LaunchedEffect(Unit) {
         try {
             val posts = RetrofitInstance.apiService.getFrases()
-            // Asumiendo que cada post tiene un creador que es un objeto User
             fraseTag = posts.map { it.tag }
             users = posts.map { it.creador }
             isLoading = false
