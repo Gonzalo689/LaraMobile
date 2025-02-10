@@ -13,7 +13,6 @@ object RetrofitInstance {
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())  // Usamos Gson para convertir JSON a objetos
             .build()
-
     }
 
     // Crear una instancia del servicio API

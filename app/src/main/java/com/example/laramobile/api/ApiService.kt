@@ -6,7 +6,7 @@ import retrofit2.http.GET
 
 interface ApiService {
 
-    @GET("posts")
+    @GET("usuarios/")
     suspend fun getUsers(): List<Usuario>
     @GET("frases/")
     suspend fun getFrases(): List<Frase>

@@ -4,14 +4,14 @@ import com.google.type.DateTime
 
 
 data class Usuario(
-    val fecha_nacimiento: DateTime?,
+    val fecha_nacimiento: String?,
     val mail: String?,
     val password: String?,
     val rol: String?,
     val nombre: String?,
     val sexo: String?,
     val parent: String?,
-    val ultima_conexion: DateTime?,
+    val ultima_conexion: String?,
     val cant_audios: Int?,
     val provincia: String?,
     val enfermedades: List<String>?,

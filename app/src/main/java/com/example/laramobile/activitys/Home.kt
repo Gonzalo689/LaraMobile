@@ -30,9 +30,9 @@ fun HomeScreen(){
 
     LaunchedEffect(Unit) {
         try {
-            val posts = RetrofitInstance.apiService.getFrases()
-            fraseTag = posts.map { it.tag }
-            users = posts.map { it.creador }
+            val posts = RetrofitInstance.apiService.getUsers()
+            fraseTag = posts.map { it.mail ?: "unknown" }
+            users = posts.map { it }
             isLoading = false
         } catch (e: Exception) {
             errorMessage = "Error: ${e.message}"
