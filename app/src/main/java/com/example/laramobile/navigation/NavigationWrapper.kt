@@ -6,16 +6,22 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.laramobile.activitys.HomeScreen
 import com.example.laramobile.activitys.LoginScreen
+import com.example.laramobile.activitys.SplashScreen
+
+
 
 @Composable
 fun NavigationWrapper(){
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = Login) {
+    NavHost(navController = navController, startDestination = SplashScreen) {
         composable<Login> {
             LoginScreen{navController.navigate(Home)}
         }
         composable<Home> {
             HomeScreen()
+        }
+        composable<SplashScreen> {
+            SplashScreen(navController)
         }
     }
 }

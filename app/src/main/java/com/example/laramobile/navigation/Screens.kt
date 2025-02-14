@@ -7,3 +7,6 @@ object Login
 
 @Serializable
 object Home
+
+@Serializable
+object SplashScreen

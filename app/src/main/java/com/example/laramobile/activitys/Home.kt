@@ -12,6 +12,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.laramobile.api.RetrofitInstance
 import com.example.laramobile.api.model.Usuario
+import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(){
@@ -28,15 +30,19 @@ fun HomeScreen(){
     var isLoading by remember { mutableStateOf(true) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
+    val coroutineScope = rememberCoroutineScope()
+
     LaunchedEffect(Unit) {
-        try {
-            val posts = RetrofitInstance.apiService.getUsers()
-            fraseTag = posts.map { it.mail ?: "unknown" }
-            users = posts.map { it }
-            isLoading = false
-        } catch (e: Exception) {
-            errorMessage = "Error: ${e.message}"
-            isLoading = false
+        coroutineScope.launch {
+            try {
+                val posts = RetrofitInstance.apiService.getUsers()
+                fraseTag = posts.map { it.mail ?: "unknown" }
+                users = posts
+                isLoading = false
+            } catch (e: Exception) {
+                errorMessage = "Error: ${e.message}"
+                isLoading = false
+            }
         }
     }
     Scaffold(

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="consentimiento">Nombre de la aplicación: PIA Lara
+        \n\n
+        Nombre del responsable del tratamiento de datos: Conselleria de Educación, Cultura y Deporte dependiente de la Generalitat Valenciana
+        \n\n
+        Finalidad del tratamiento de datos: La aplicación PIA Lara es un proyecto para la creación de una aplicación que usará archivos de audio de forma que se facilite su entendimiento mediante el uso de inteligencia artificial. Para ello se utilizarán los audios de los usuarios/interesados en los entrenamientos, pero nunca para ser mostrados a ningún usuario ni cedidos a terceros
+        \n\n
+        Base legitimadora del tratamiento de datos: El tratamiento de datos se realiza en base al consentimiento del usuario, que se manifiesta al aceptar los términos y condiciones de la aplicación y la firma y aceptación del presente documento.
+        \n\n
+        Información necesaria para el interesado: Para utilizar la aplicación, el usuario debe proporcionar su nombre y apellidos. Además, se recogerá la información generada por el usuario en el uso de la aplicación, como las grabaciones de los audios y textos creados por los/as mismos/as.
+        \n\n
+        Derechos del interesado en relación con sus datos personales: El usuario podrá revocar su consentimiento en cualquier momento. Además, el usuario tiene derecho a acceder, rectificar y suprimir sus datos personales, así como a limitar y oponerse al tratamiento de los mismos. También tiene derecho a la portabilidad de sus datos y a presentar una reclamación ante la autoridad de control competente.
+        \n\n
+        Forma de ejercicio de los derechos del interesado: Para ejercitar sus derechos, el usuario debe enviar un correo electrónico a protecciondedatos@piafplara.es, indicando su nombre y apellidos, dirección de correo electrónico y el derecho que desea ejercitar.
+        \n\n
+        Si continúa usando la aplicación, se entiende que usted ha leído, comprende y acepta los términos anteriormente expresados.</string>
+</resources>

@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">LaraMobile</string>
+    <string name="frase_1">\"Comunicarse es un derecho, no un privilegio\"</string>
+    <string name="frase_2">\"Nadie sabe todo, alguien sabe algo, entre todas las personas sabemos mucho\"</string>
+    <string name="frase_3">\"La comunicación es el alma de las relaciones\"</string>
 </resources>
