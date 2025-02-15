@@ -10,3 +10,6 @@ object Home
 
 @Serializable
 object SplashScreen
+
+@Serializable
+object Tags

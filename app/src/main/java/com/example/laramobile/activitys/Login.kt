@@ -49,14 +49,14 @@ import com.example.laramobile.R
 import com.example.laramobile.api.RetrofitInstance
 import com.example.laramobile.api.model.LoginRequest
 import com.example.laramobile.api.model.LoginResponse
-import kotlinx.coroutines.launch
+import com.example.laramobile.ui.theme.*
 
 
 @Composable
 fun LoginScreen(navigateToHome: () -> Unit) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var checked by remember { mutableStateOf(false) }
+    var checked by remember { mutableStateOf(true) } // Default false ponerlo a true para pruebas
     var showError by remember { mutableStateOf<String?>(null) }
     val scrollState = rememberScrollState()
     val coroutineScope = rememberCoroutineScope() // Agregamos el scope
@@ -64,7 +64,7 @@ fun LoginScreen(navigateToHome: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(White)
             .padding(16.dp)
             .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -83,7 +83,7 @@ fun LoginScreen(navigateToHome: () -> Unit) {
             text = "Bienvenido a Lara",
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold,
-            color = Color.Black,
+            color = Black,
             textAlign = TextAlign.Center
         )
 
@@ -134,8 +134,7 @@ fun LoginScreen(navigateToHome: () -> Unit) {
                 .height(48.dp),
             shape = RoundedCornerShape(8.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF2CA58D),
-                disabledContainerColor = Color.Gray
+                disabledContainerColor = Grey
             )
         ) {
             Text("Iniciar sesión")
@@ -153,7 +152,7 @@ fun LoginScreen(navigateToHome: () -> Unit) {
         TextButton(onClick = { /* Lógica para recuperar contraseña */ }) {
             Text(
                 "¿Olvidaste la contraseña?",
-                color = Color(0xFF2CA58D),
+                color = GreenPrm,
                 fontSize = 16.sp,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -161,7 +160,7 @@ fun LoginScreen(navigateToHome: () -> Unit) {
 
         showError?.let { error ->
             Spacer(modifier = Modifier.height(10.dp))
-            Text(text = error, color = Color.Red, fontSize = 14.sp)
+            Text(text = error, color = Red, fontSize = 14.sp)
         }
     }
 }
@@ -182,9 +181,9 @@ fun TermsAndConditions(onCheckedChange: (Boolean) -> Unit, checked: Boolean) {
             checked = checked,
             onCheckedChange = null,
             colors = CheckboxDefaults.colors(
-                checkedColor = Color(0xFF2CA58D),
-                uncheckedColor = Color(0xFF2CA58D),
-                checkmarkColor = Color.White
+                checkedColor = GreenPrm,
+                uncheckedColor = GreenPrm,
+                checkmarkColor = White
             )
         )
         Spacer(modifier = Modifier.width(8.dp))

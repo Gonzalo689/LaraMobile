@@ -7,7 +7,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.laramobile.activitys.HomeScreen
 import com.example.laramobile.activitys.LoginScreen
 import com.example.laramobile.activitys.SplashScreen
-
+import com.example.laramobile.activitys.TagsScreen
 
 
 @Composable
@@ -18,10 +18,13 @@ fun NavigationWrapper(){
             LoginScreen{navController.navigate(Home)}
         }
         composable<Home> {
-            HomeScreen()
+            HomeScreen{navController.navigate(Tags)}
         }
         composable<SplashScreen> {
             SplashScreen(navController)
+        }
+        composable<Tags> {
+            TagsScreen()
         }
     }
 }
