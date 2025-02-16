@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.TextField
@@ -16,10 +17,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.laramobile.api.RetrofitInstance
 import com.example.laramobile.ui.theme.GreenPrm
+import com.example.laramobile.ui.theme.Pink80
+import kotlinx.coroutines.launch
 
 @Preview(showBackground = true)
 @Composable
@@ -63,29 +68,11 @@ fun TagsScreen(){
 
         // Etiquetas recientes
         Text(text = "Recientes", fontSize = 18.sp, color = Color.Black)
-        Spacer(modifier = Modifier.height(8.dp))
-        Column {
-            recentTags.chunked(2).forEach { rowItems ->
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    rowItems.forEach { tag ->
-                        OutlinedButton(
-                            onClick = { /* Acción de etiqueta */ },
-                            shape = RoundedCornerShape(12.dp),
-                            modifier = Modifier.weight(1f).padding(4.dp)
-                        ) {
-                            Text(tag)
-                        }
-                    }
-                    // Agrega botones vacíos para mantener la alineación si no hay suficientes elementos en la última fila
-                    repeat(2 - rowItems.size) {
-                        Spacer(modifier = Modifier.weight(1f))
-                    }
-                }
-            }
-        }
+        Spacer(modifier = Modifier.height(20.dp))
+
+        // cargar Tags
+        GetSylabus()
+
 
         Spacer(modifier = Modifier.height(50.dp))
 
@@ -101,3 +88,75 @@ fun TagsScreen(){
         }
     }
 }
+
+@Composable
+fun GetSylabus() {
+    var tagList by remember { mutableStateOf<List<List<String>>>(emptyList()) }
+    var isLoading by remember { mutableStateOf(true) }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+    val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+        coroutineScope.launch {
+            try {
+                val posts = RetrofitInstance.apiService.getSylabus()
+                tagList = posts.map { it.tags ?: emptyList() }
+                isLoading = false
+            } catch (e: Exception) {
+                errorMessage = "Error: ${e.message}"
+                isLoading = false
+            }
+        }
+    }
+    when {
+        isLoading -> {
+            CircularProgressIndicator()
+
+        }
+        errorMessage != null -> {
+            Box(
+                contentAlignment = Alignment.Center
+            ) {
+                Text(text = errorMessage!!, color = Pink80, fontWeight = FontWeight.Bold, fontSize = 20.sp)
+            }
+        }
+        else -> {
+            val recentTags = tagList.flatten().distinct().take(8)
+
+            Column {
+                recentTags.chunked(2).forEach { rowItems ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        rowItems.forEach { tag ->
+                            OutlinedButton(
+                                onClick = { /* Acción de etiqueta */ },
+                                shape = RoundedCornerShape(12.dp),
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .padding(4.dp)
+                            ) {
+                                Text(tag)
+                            }
+                        }
+                        // Agregar Spacers si faltan elementos para completar la fila
+                        repeat(2 - rowItems.size) {
+                            Spacer(modifier = Modifier.weight(1f))
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+
+@Composable
+fun ErrorMessage(message: String) {
+    Text(text = message, modifier = Modifier.padding(16.dp), color = Color.Red)
+}
+
+

@@ -3,6 +3,7 @@ package com.example.laramobile.api
 import com.example.laramobile.api.model.Frase
 import com.example.laramobile.api.model.LoginRequest
 import com.example.laramobile.api.model.LoginResponse
+import com.example.laramobile.api.model.Sylabus
 import com.example.laramobile.api.model.Usuario
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -17,4 +18,7 @@ interface ApiService {
 
     @GET("frases/")
     suspend fun getFrases(): List<Frase>
+
+    @GET("sylabus")
+    suspend fun getSylabus(): List<Sylabus>
 }

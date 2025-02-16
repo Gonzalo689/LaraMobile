@@ -28,7 +28,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -202,8 +201,8 @@ fun TermsAndConditions(onCheckedChange: (Boolean) -> Unit, checked: Boolean) {
             text = {
                 Column(
                     modifier = Modifier
-                        .height(300.dp) // Fijamos altura para que sea scrollable
-                        .verticalScroll(rememberScrollState()) // Hacemos que el texto sea desplazable
+                        .height(300.dp)
+                        .verticalScroll(rememberScrollState())
                 ) {
                     Text(stringResource(R.string.consentimiento)) }
                    },
