@@ -21,16 +21,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.laramobile.api.RetrofitInstance
 import com.example.laramobile.ui.theme.GreenPrm
 import com.example.laramobile.ui.theme.Pink80
 import kotlinx.coroutines.launch
 
-@Preview(showBackground = true)
+// no funciona con navController
+//@Preview(showBackground = true)
 @Composable
-fun TagsScreen(){
+fun TagsScreen(navController: NavController){
     var searchText by remember { mutableStateOf(TextFieldValue("")) }
-    val recentTags = listOf("TECNOLOGÍA", "COCINA", "VACACIONES", "COMPRAS", "MODA", "DEPORTE")
+//    val recentTags = listOf("TECNOLOGÍA", "COCINA", "VACACIONES", "COMPRAS", "MODA", "DEPORTE")
 
     Column(
         modifier = Modifier

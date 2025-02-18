@@ -24,8 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.laramobile.R
-import com.example.laramobile.navigation.Login
-import com.example.laramobile.navigation.SplashScreen
+import com.example.laramobile.navigation.Screen
 import kotlinx.coroutines.delay
 
 
@@ -38,8 +37,8 @@ fun SplashScreen(navController: NavController) {
 
     LaunchedEffect(Unit) {
         delay(2000)
-        navController.navigate(Login) {
-            popUpTo(SplashScreen) { inclusive = true }
+        navController.navigate(Screen.Login.route) {
+            popUpTo(Screen.SplashScreen.route) { inclusive = true }
         }
     }
 

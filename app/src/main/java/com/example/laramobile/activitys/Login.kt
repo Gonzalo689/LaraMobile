@@ -44,21 +44,23 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.laramobile.R
 import com.example.laramobile.api.RetrofitInstance
 import com.example.laramobile.api.model.LoginRequest
 import com.example.laramobile.api.model.LoginResponse
+import com.example.laramobile.navigation.Screen
 import com.example.laramobile.ui.theme.*
 
 
 @Composable
-fun LoginScreen(navigateToHome: () -> Unit) {
+fun LoginScreen(navController: NavController) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var checked by remember { mutableStateOf(true) } // Default false ponerlo a true para pruebas
+    var checked by remember { mutableStateOf(false) } // Default false, ponerlo a true para pruebas
     var showError by remember { mutableStateOf<String?>(null) }
     val scrollState = rememberScrollState()
-    val coroutineScope = rememberCoroutineScope() // Agregamos el scope
+    val coroutineScope = rememberCoroutineScope()
 
     Column(
         modifier = Modifier
@@ -116,7 +118,7 @@ fun LoginScreen(navigateToHome: () -> Unit) {
 
         Button(
             onClick = {
-                navigateToHome()
+                navController.navigate(Screen.Home.route)
 //                coroutineScope.launch { // Ejecutamos en una corrutina
 //                    val response = VerificarUsuario(email, password)
 //                    println("gola" +response)
