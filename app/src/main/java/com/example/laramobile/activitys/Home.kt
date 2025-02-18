@@ -31,7 +31,7 @@ import com.example.laramobile.ui.theme.GreenPrm
 
 
 @Composable
-//fun HomeScreen(navController: () -> Unit) {
+
 fun HomeScreen(navController: NavController) {
     Box(
         modifier = Modifier

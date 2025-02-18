@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.example.laramobile.navigation.NavigationWrapper
-import com.example.laramobile.navigation.TabNavigation
+import com.example.laramobile.navigation.MainNavigation
+
 import com.example.laramobile.ui.theme.LaraMobileTheme
 
 class MainActivity : ComponentActivity() {
@@ -14,7 +14,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             LaraMobileTheme {
-                NavigationWrapper()
+//                NavigationButton()
+                MainNavigation()
             }
         }
     }
