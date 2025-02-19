@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,83 +15,122 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.laramobile.R
+import com.example.laramobile.api.getPhrasesImpl
+import com.example.laramobile.api.getTagsImpl
 import com.example.laramobile.navigation.Screen
+import com.example.laramobile.ui.theme.Black
 import com.example.laramobile.ui.theme.GreenPrm
+import com.example.laramobile.ui.theme.Pink80
 
 
 @Composable
 fun HomeScreen(navController: NavController) {
-    Box(
+
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(12.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top,
+
     ) {
-        IconButton(
-            onClick = {
-                // Acción del botón
-            },
+        Image(
+            painter = painterResource(id = R.drawable.lara),
+            contentDescription = "Logo",
             modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(16.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Default.AccountCircle,
-                contentDescription = "Menú",
-                modifier = Modifier.size(40.dp),
-                tint = GreenPrm
+                .height(100.dp)
+                .fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(40.dp))
+        Text(
+            text = "Tus últimos audios",
+            fontSize = 30.sp,
+            fontWeight = FontWeight.Bold,
+            color = Black,
+            textAlign = TextAlign.Center
+        )
+        Spacer(modifier = Modifier.height(40.dp))
 
-            )
+
+        GetPhrases()
+        Spacer(modifier = Modifier.height(24.dp))
+
+
+    }
+}
+@Composable
+fun GetPhrases() {
+    var tagList by remember { mutableStateOf<List<String>>(emptyList()) }
+    var isLoading by remember { mutableStateOf(true) }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+    val name by remember { mutableStateOf("Mario") } // poner el nombre de usuario
+    val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+        getPhrasesImpl(coroutineScope, name, { tags ->
+            tagList = tags
+            isLoading = false
+        }, { error ->
+            errorMessage = error
+            isLoading = false
+        })
+    }
+    when {
+        isLoading -> {
+            CircularProgressIndicator()
         }
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.lara),
-                contentDescription = "Logo",
-                modifier = Modifier
-                    .height(200.dp)
-                    .fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(40.dp))
-
-            Button(onClick = {
-                navController.navigate(Screen.Tags.route)
-                }, enabled = true, modifier = Modifier
-                    .fillMaxWidth()
-                    .height(48.dp), shape = RoundedCornerShape(8.dp),) {
-                Text("Ver etiquetas")
-            }
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Button(
-                onClick = {
-                    // Acción del botón
-                },
-                enabled = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(48.dp),
-                shape = RoundedCornerShape(8.dp),
+        errorMessage != null -> {
+            Box(
+                contentAlignment = Alignment.Center
             ) {
-                Text("Grabar audios")
+                Text(text = errorMessage!!, color = Pink80, fontWeight = FontWeight.Bold, fontSize = 20.sp)
+            }
+        }
+        else -> {
+            Column {
+                tagList.chunked(2).forEach { rowItems ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        rowItems.forEach { tag ->
+                            OutlinedButton(
+                                onClick = {  },
+                                shape = RoundedCornerShape(12.dp),
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .padding(4.dp)
+                            ) {
+                                Text(tag)
+                            }
+                        }
+                        repeat(2 - rowItems.size) {
+                            Spacer(modifier = Modifier.weight(1f))
+                        }
+                    }
+                }
             }
         }
     }
-
 }

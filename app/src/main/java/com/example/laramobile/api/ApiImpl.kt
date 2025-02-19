@@ -1,7 +1,11 @@
 package com.example.laramobile.api
 
+import android.util.Log
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.LinkedList
 
 
 fun getTagsImpl(
@@ -9,31 +13,23 @@ fun getTagsImpl(
     onSuccess: (List<String>) -> Unit,
     onError: (String) -> Unit
 ) {
+//    CoroutineScope(Dispatchers.IO)
     coroutineScope.launch {
         try {
             val sylabusList = RetrofitInstance.apiService.getSylabus()
 
             var minAudios = sylabusList.minOfOrNull { it.audios?.size ?: 0 } ?: 0
 
-            var tags: List<String>
 
-            do {
-                tags = sylabusList
-                    .filter { it.audios?.size == minAudios }
-                    .flatMap { it.tags.orEmpty() }
-                    .groupingBy { it }
-                    .eachCount()
-                    .toList()
-                    .sortedBy { it.second }
-                    .map { it.first }
-                    .take(8)
-
-
-
-                minAudios++
-
-
-            } while (tags.size <= 8)
+            val tags = sylabusList
+                .filter { it.audios?.size == minAudios }
+                .flatMap { it.tags.orEmpty() }
+                .groupingBy { it }
+                .eachCount()
+                .toList()
+                .sortedBy { it.second }
+                .map { it.first }
+                .take(8)
 
             onSuccess(tags)
         } catch (e: Exception) {
@@ -41,6 +37,7 @@ fun getTagsImpl(
         }
     }
 }
+
 
 fun getPhrasesImpl(
     coroutineScope: CoroutineScope,
@@ -52,17 +49,14 @@ fun getPhrasesImpl(
         try {
             val sylabusList = RetrofitInstance.apiService.getSylabus()
 
-            val allTags = sylabusList
-                .mapNotNull { it.tags }
-                .flatten()
-                .groupBy { it }
-                .mapValues { it.value.size }
-                .toList()
-                .sortedBy { it.second }
-                .map { it.first }
-                .take(8)
 
-            onSuccess(allTags)
+             val filteredText = sylabusList
+                 .filter { (it.creador?.nombre == name
+                         && it.texto?.isNotEmpty() == true)}
+                 .mapNotNull { it.texto }
+
+
+            onSuccess(filteredText)
         } catch (e: Exception) {
             onError("Error: ${e.message}")
         }
