@@ -21,17 +21,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.laramobile.R
 import com.example.laramobile.navigation.Screen
-
 import com.example.laramobile.ui.theme.GreenPrm
 
 
 @Composable
-
 fun HomeScreen(navController: NavController) {
     Box(
         modifier = Modifier

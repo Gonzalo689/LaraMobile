@@ -13,6 +13,7 @@ interface ApiService {
 
     @GET("usuarios/")
     suspend fun getUsers(): List<Usuario>
+
     @POST("login/token")
     suspend fun logUser(@Body request:LoginRequest): LoginResponse
 

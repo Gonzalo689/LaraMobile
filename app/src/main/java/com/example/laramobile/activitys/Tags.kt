@@ -4,7 +4,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -22,23 +24,23 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.laramobile.api.RetrofitInstance
+import com.example.laramobile.api.getTagsImpl
 import com.example.laramobile.ui.theme.GreenPrm
 import com.example.laramobile.ui.theme.Pink80
-import kotlinx.coroutines.launch
+
 
 // no funciona con navController
 //@Preview(showBackground = true)
 @Composable
 fun TagsScreen(navController: NavController){
     var searchText by remember { mutableStateOf(TextFieldValue("")) }
-//    val recentTags = listOf("TECNOLOGÍA", "COCINA", "VACACIONES", "COMPRAS", "MODA", "DEPORTE")
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
-            .padding(top = 50.dp),
+            .padding(top = 50.dp)
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // Campo de búsqueda
@@ -93,22 +95,19 @@ fun TagsScreen(navController: NavController){
 
 @Composable
 fun GetSylabus() {
-    var tagList by remember { mutableStateOf<List<List<String>>>(emptyList()) }
+    var tagList by remember { mutableStateOf<List<String>>(emptyList()) }
     var isLoading by remember { mutableStateOf(true) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
     val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
-        coroutineScope.launch {
-            try {
-                val posts = RetrofitInstance.apiService.getSylabus()
-                tagList = posts.map { it.tags ?: emptyList() }
-                isLoading = false
-            } catch (e: Exception) {
-                errorMessage = "Error: ${e.message}"
-                isLoading = false
-            }
-        }
+        getTagsImpl(coroutineScope, { tags ->
+            tagList = tags
+            isLoading = false
+        }, { error ->
+            errorMessage = error
+            isLoading = false
+        })
     }
     when {
         isLoading -> {
@@ -123,10 +122,9 @@ fun GetSylabus() {
             }
         }
         else -> {
-            val recentTags = tagList.flatten().distinct().take(8)
 
             Column {
-                recentTags.chunked(2).forEach { rowItems ->
+                tagList.chunked(2).forEach { rowItems ->
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly
@@ -151,14 +149,6 @@ fun GetSylabus() {
             }
         }
     }
-}
-
-
-
-
-@Composable
-fun ErrorMessage(message: String) {
-    Text(text = message, modifier = Modifier.padding(16.dp), color = Color.Red)
 }
 
 
