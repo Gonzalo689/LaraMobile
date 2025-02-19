@@ -13,13 +13,55 @@ fun getTagsImpl(
         try {
             val sylabusList = RetrofitInstance.apiService.getSylabus()
 
+            var minAudios = sylabusList.minOfOrNull { it.audios?.size ?: 0 } ?: 0
+
+            var tags: List<String>
+
+            do {
+                tags = sylabusList
+                    .filter { it.audios?.size == minAudios }
+                    .flatMap { it.tags.orEmpty() }
+                    .groupingBy { it }
+                    .eachCount()
+                    .toList()
+                    .sortedBy { it.second }
+                    .map { it.first }
+                    .take(8)
+
+
+
+                minAudios++
+
+
+            } while (tags.size <= 8)
+
+            onSuccess(tags)
+        } catch (e: Exception) {
+            onError("Error: ${e.message}")
+        }
+    }
+}
+
+fun getPhrasesImpl(
+    coroutineScope: CoroutineScope,
+    name: String,
+    onSuccess: (List<String>) -> Unit,
+    onError: (String) -> Unit
+) {
+    coroutineScope.launch {
+        try {
+            val sylabusList = RetrofitInstance.apiService.getSylabus()
+
             val allTags = sylabusList
                 .mapNotNull { it.tags }
                 .flatten()
-                .distinct()
+                .groupBy { it }
+                .mapValues { it.value.size }
+                .toList()
+                .sortedBy { it.second }
+                .map { it.first }
                 .take(8)
 
-            // Pasar las etiquetas procesadas al onSuccess
             onSuccess(allTags)
         } catch (e: Exception) {
             onError("Error: ${e.message}")

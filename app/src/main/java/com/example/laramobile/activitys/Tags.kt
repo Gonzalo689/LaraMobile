@@ -29,7 +29,7 @@ import com.example.laramobile.ui.theme.GreenPrm
 import com.example.laramobile.ui.theme.Pink80
 
 
-// no funciona con navController
+// no funciona con navController el preview
 //@Preview(showBackground = true)
 @Composable
 fun TagsScreen(navController: NavController){
@@ -71,12 +71,11 @@ fun TagsScreen(navController: NavController){
         Spacer(modifier = Modifier.height(50.dp))
 
         // Etiquetas recientes
-        Text(text = "Recientes", fontSize = 18.sp, color = Color.Black)
+        Text(text = "Menos usadas", fontSize = 18.sp, color = Color.Black)
         Spacer(modifier = Modifier.height(20.dp))
 
         // cargar Tags
         GetSylabus()
-
 
         Spacer(modifier = Modifier.height(50.dp))
 
@@ -131,7 +130,7 @@ fun GetSylabus() {
                     ) {
                         rowItems.forEach { tag ->
                             OutlinedButton(
-                                onClick = { /* Acción de etiqueta */ },
+                                onClick = {  },
                                 shape = RoundedCornerShape(12.dp),
                                 modifier = Modifier
                                     .weight(1f)
@@ -140,7 +139,6 @@ fun GetSylabus() {
                                 Text(tag)
                             }
                         }
-                        // Agregar Spacers si faltan elementos para completar la fila
                         repeat(2 - rowItems.size) {
                             Spacer(modifier = Modifier.weight(1f))
                         }
