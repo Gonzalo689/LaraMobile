@@ -1,94 +1,103 @@
-package com.example.laramobile.activitys
+package com.example.laramobile.activitys.nav
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.TextField
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.laramobile.R
-import com.example.laramobile.api.getPhrasesImpl
 import com.example.laramobile.api.getTagsImpl
-import com.example.laramobile.navigation.Screen
-import com.example.laramobile.ui.theme.Black
 import com.example.laramobile.ui.theme.GreenPrm
 import com.example.laramobile.ui.theme.Pink80
 
 
+// no funciona con navController el preview
+//@Preview(showBackground = true)
 @Composable
-fun HomeScreen(navController: NavController) {
+fun TagsScreen(navController: NavController){
+    var searchText by remember { mutableStateOf(TextFieldValue("")) }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(12.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top,
-
+            .padding(16.dp)
+            .padding(top = 50.dp)
+            .verticalScroll(rememberScrollState()),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.lara),
-            contentDescription = "Logo",
-            modifier = Modifier
-                .height(100.dp)
-                .fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(40.dp))
-        Text(
-            text = "Tus últimos audios",
-            fontSize = 30.sp,
-            fontWeight = FontWeight.Bold,
-            color = Black,
-            textAlign = TextAlign.Center
-        )
-        Spacer(modifier = Modifier.height(40.dp))
+        // Campo de búsqueda
+        Text(text = "Etiquetas", fontSize = 22.sp, color = Color.Black)
+        Spacer(modifier = Modifier.height(10.dp))
+        Row {
+            TextField(
+                value = searchText,
+                onValueChange = { searchText = it },
+                placeholder = { Text("Buscar") },
+                leadingIcon = {
+                    Icon(
+                        painter = painterResource(id = android.R.drawable.ic_menu_search),
+                        contentDescription = "Buscar..."
+                    )
+                },
+                modifier = Modifier.weight(1f)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Button(
+                onClick = { /* Acción de búsqueda */ }
+            ) {
+                Text("Buscar", color = Color.White)
+            }
+        }
 
+        Spacer(modifier = Modifier.height(50.dp))
 
-        GetPhrases()
-        Spacer(modifier = Modifier.height(24.dp))
+        // Etiquetas recientes
+        Text(text = "Menos usadas", fontSize = 18.sp, color = Color.Black)
+        Spacer(modifier = Modifier.height(20.dp))
 
+        // cargar Tags
+        GetSylabus()
 
+        Spacer(modifier = Modifier.height(50.dp))
+
+        // Botón de búsqueda aleatoria
+        Text(text = "Aleatoria", fontSize = 18.sp, color = Color.Black)
+        Spacer(modifier = Modifier.height(8.dp))
+        Button(
+            onClick = { /* Acción de búsqueda aleatoria */ },
+            modifier = Modifier.clip(RoundedCornerShape(12.dp))
+        ) {
+            Text("Buscar", color = Color.White)
+        }
     }
 }
+
 @Composable
-fun GetPhrases() {
+fun GetSylabus() {
     var tagList by remember { mutableStateOf<List<String>>(emptyList()) }
     var isLoading by remember { mutableStateOf(true) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
-    val name by remember { mutableStateOf("Mario") } // poner el nombre de usuario
     val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
-        getPhrasesImpl(coroutineScope, name, { tags ->
+        getTagsImpl(coroutineScope, { tags ->
             tagList = tags
             isLoading = false
         }, { error ->
@@ -99,6 +108,7 @@ fun GetPhrases() {
     when {
         isLoading -> {
             CircularProgressIndicator()
+
         }
         errorMessage != null -> {
             Box(
@@ -108,6 +118,7 @@ fun GetPhrases() {
             }
         }
         else -> {
+
             Column {
                 tagList.chunked(2).forEach { rowItems ->
                     Row(
@@ -134,3 +145,5 @@ fun GetPhrases() {
         }
     }
 }
+
+

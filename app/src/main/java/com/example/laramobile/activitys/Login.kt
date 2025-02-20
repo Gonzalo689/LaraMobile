@@ -3,9 +3,6 @@ package com.example.laramobile.activitys
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.rememberScrollableState
-import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,15 +16,21 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,23 +44,31 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.laramobile.R
 import com.example.laramobile.api.RetrofitInstance
-import com.example.laramobile.api.model.LoginRequest
+import com.example.laramobile.api.loginUser
 import com.example.laramobile.api.model.LoginResponse
+import com.example.laramobile.api.model.User
 import com.example.laramobile.navigation.Screen
 import com.example.laramobile.ui.theme.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import retrofit2.HttpException
 
 
 @Composable
 fun LoginScreen(navController: NavController) {
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var checked by remember { mutableStateOf(false) } // Default false, ponerlo a true para pruebas
+//    var email by remember { mutableStateOf("") }
+//    var password by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("cliente@cliente.com") }
+    var password by remember { mutableStateOf("cliente") }
+    var checked by remember { mutableStateOf(true) } // Default false, ponerlo a true para pruebas
     var showError by remember { mutableStateOf<String?>(null) }
     val scrollState = rememberScrollState()
     val coroutineScope = rememberCoroutineScope()
@@ -84,7 +95,6 @@ fun LoginScreen(navController: NavController) {
             text = "Bienvenido a Lara",
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold,
-            color = Black,
             textAlign = TextAlign.Center
         )
 
@@ -101,14 +111,22 @@ fun LoginScreen(navController: NavController) {
         )
 
         Spacer(modifier = Modifier.height(16.dp))
-
+        var passwordVisible by remember { mutableStateOf(false) }
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
             label = { Text("Contraseña") },
             singleLine = true,
-            visualTransformation = PasswordVisualTransformation(),
+            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            trailingIcon = {
+                IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                    Icon(
+                        imageVector = if (passwordVisible) Icons.Default.Search else Icons.Default.Lock,
+                        contentDescription = if (passwordVisible) "Ocultar contraseña" else "Mostrar contraseña"
+                    )
+                }
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 8.dp)
@@ -118,16 +136,20 @@ fun LoginScreen(navController: NavController) {
 
         Button(
             onClick = {
-                navController.navigate(Screen.Home.route)
-//                coroutineScope.launch { // Ejecutamos en una corrutina
-//                    val response = VerificarUsuario(email, password)
-//                    println("gola" +response)
-//                    if (response?.success == true) {
-//
-//                    } else {
-//                        showError = response?.message ?: "Error desconocido"
-//                    }
-//                }
+                loginUser(
+                    coroutineScope,
+                    email = email,
+                    password = password,
+                    onSuccess = { loginRes ->
+
+                        AppConfig.user = loginRes.user
+
+                        navController.navigate(Screen.Home.route)
+                    },
+                    onError = { error ->
+                        showError = error.message
+                    }
+                )
             },
             enabled = checked,
             modifier = Modifier
@@ -153,7 +175,6 @@ fun LoginScreen(navController: NavController) {
         TextButton(onClick = { /* Lógica para recuperar contraseña */ }) {
             Text(
                 "¿Olvidaste la contraseña?",
-                color = GreenPrm,
                 fontSize = 16.sp,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -225,10 +246,3 @@ fun TermsAndConditions(onCheckedChange: (Boolean) -> Unit, checked: Boolean) {
     }
 }
 
-suspend fun VerificarUsuario(email: String, password: String): LoginResponse? {
-    return try {
-        RetrofitInstance.apiService.logUser(LoginRequest(email, password))
-    } catch (e: Exception) {
-        null
-    }
-}

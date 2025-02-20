@@ -1,6 +1,5 @@
 package com.example.laramobile.navigation
 
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -9,10 +8,10 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.laramobile.activitys.HomeScreen
+import com.example.laramobile.activitys.nav.HomeScreen
 import com.example.laramobile.activitys.LoginScreen
 import com.example.laramobile.activitys.SplashScreen
-import com.example.laramobile.activitys.TagsScreen
+import com.example.laramobile.activitys.nav.TagsScreen
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -21,6 +20,7 @@ import androidx.navigation.NavController
 
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.laramobile.activitys.nav.ProfileScreen
 import com.example.laramobile.ui.theme.GreenPrm
 
 @Composable
@@ -49,13 +49,14 @@ fun MainNavigation() {
             composable(Screen.Login.route) { LoginScreen(navController) }
             composable(Screen.Home.route) { HomeScreen(navController) }
             composable(Screen.Tags.route) { TagsScreen(navController) }
+            composable(Screen.Profile.route) { ProfileScreen() }
         }
     }
 }
 
 @Composable
 fun BottomNavigationBar(navController: NavController ,currentRoute: String?) {
-    val screens = listOf(Screen.Home, Screen.Tags)
+    val screens = listOf(Screen.Home, Screen.Tags, Screen.Profile)
 
     NavigationBar(containerColor = GreenPrm) {
         screens.forEach { screen ->

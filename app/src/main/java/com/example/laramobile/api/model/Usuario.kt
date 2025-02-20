@@ -1,12 +1,10 @@
 package com.example.laramobile.api.model
 
-import com.google.type.DateTime
 
 
-data class Usuario(
+data class User(
     val fecha_nacimiento: String?,
-    val mail: String?,
-    val password: String?,
+    val mail: String,
     val rol: String?,
     val nombre: String?,
     val sexo: String?,
@@ -16,7 +14,7 @@ data class Usuario(
     val provincia: String?,
     val enfermedades: List<String>?,
     val dis: List<String>?,
-    val font_size: Float?,
+    val font_size: Int?,
     val entidad: String?,
     val observaciones: String?
 )
