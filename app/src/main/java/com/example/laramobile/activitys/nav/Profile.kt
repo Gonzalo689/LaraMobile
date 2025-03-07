@@ -29,22 +29,23 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.example.laramobile.R
 import com.example.laramobile.activitys.AppConfig.user
-import com.example.laramobile.activitys.pruebaUser
 import com.example.laramobile.navigation.MainNavigation
 import com.example.laramobile.ui.theme.LaraMobileTheme
 import com.example.laramobile.ui.theme.ThemeViewModel
 import com.example.laramobile.ui.theme.White
 import com.example.laramobile.utils.Preferences
 
+
 @Preview
 @Composable
 fun ProfileScreen() {
-    pruebaUser()
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .padding(16.dp)
+            .background(Color.White),
+        horizontalAlignment = Alignment.CenterHorizontally,
+
     ) {
         // Avatar Image
         Image(

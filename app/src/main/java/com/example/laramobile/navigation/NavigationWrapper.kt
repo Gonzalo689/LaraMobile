@@ -1,5 +1,9 @@
 package com.example.laramobile.navigation
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -13,15 +17,18 @@ import com.example.laramobile.activitys.LoginScreen
 import com.example.laramobile.activitys.SplashScreen
 import com.example.laramobile.activitys.nav.TagsScreen
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.laramobile.activitys.nav.AudioRecordingScreen
 import com.example.laramobile.activitys.nav.ProfileScreen
-import com.example.laramobile.ui.theme.GreenPrm
+import com.example.laramobile.ui.theme.*
 
 @Composable
 fun MainNavigation() {
@@ -30,7 +37,6 @@ fun MainNavigation() {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
-    // Lista de pantallas donde NO queremos mostrar la barra de navegación
     val hideNavigationScreens = listOf(Screen.SplashScreen.route, Screen.Login.route)
 
     Scaffold(
@@ -40,31 +46,44 @@ fun MainNavigation() {
             }
         }
     ) { innerPadding ->
-        NavHost(
-            navController = navController,
-            startDestination = Screen.Home.route,
-            modifier = Modifier.padding(innerPadding)
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colors.background)
+            .padding(innerPadding)
         ) {
-            composable(Screen.SplashScreen.route) { SplashScreen(navController) }
-            composable(Screen.Login.route) { LoginScreen(navController) }
-            composable(Screen.Home.route) { HomeScreen(navController) }
-            composable(Screen.Tags.route) { TagsScreen(navController) }
-            composable(Screen.Profile.route) { ProfileScreen() }
+            NavHost(
+                navController = navController,
+                startDestination = Screen.SplashScreen.route
+            ) {
+                composable(Screen.SplashScreen.route) { SplashScreen(navController) }
+                composable(Screen.Login.route) { LoginScreen(navController) }
+                composable(Screen.Home.route) { HomeScreen(navController) }
+                composable(Screen.Tags.route) { TagsScreen(navController) }
+                composable(Screen.Profile.route) { ProfileScreen() }
+                composable(Screen.RecordAudio.route) { AudioRecordingScreen() }
+            }
         }
     }
 }
 
 @Composable
-fun BottomNavigationBar(navController: NavController ,currentRoute: String?) {
-    val screens = listOf(Screen.Home, Screen.Tags, Screen.Profile)
-
-    NavigationBar(containerColor = GreenPrm) {
+fun BottomNavigationBar(navController: NavController, currentRoute: String?) {
+    val screens = listOf(Screen.Home,Screen.RecordAudio, Screen.Tags, Screen.Profile)
+    NavigationBar(
+        containerColor = GreenPrm,
+//        modifier = Modifier.height(56.dp)
+        ) {
         screens.forEach { screen ->
-//            val navBackStackEntry by navController.currentBackStackEntryAsState()
-//            val currentRoute = navBackStackEntry?.destination?.route
             NavigationBarItem(
-                label = { Text(text = screen.title!!) },
-                icon = { Icon(imageVector = screen.icon!!, contentDescription = null) },
+                label = {
+                    Text(text = screen.title!!)
+                },
+                icon = {
+                    Icon(
+                        imageVector = screen.icon!!,
+                        contentDescription = null
+                    )
+                },
                 selected = currentRoute == screen.route,
                 onClick = {
                     navController.navigate(screen.route) {
@@ -74,11 +93,30 @@ fun BottomNavigationBar(navController: NavController ,currentRoute: String?) {
                         launchSingleTop = true
                         restoreState = true
                     }
-                }
+                },
+                colors = androidx.compose.material3.NavigationBarItemDefaults.colors(
+                    selectedIconColor = PurpleGrey40,
+                    unselectedIconColor = White,
+                    selectedTextColor = PurpleGrey40,
+                    unselectedTextColor = White,
+                    indicatorColor = GreenPrm
+                )
             )
         }
     }
 }
+
+fun navigateToTags(navController: NavController) {
+    navController.navigate(Screen.Tags.route) {
+        // Asegúrate de no apilar pantallas innecesarias
+        popUpTo(navController.graph.findStartDestination().id) {
+            saveState = true
+        }
+        launchSingleTop = true
+        restoreState = true
+    }
+}
+
 
 
 

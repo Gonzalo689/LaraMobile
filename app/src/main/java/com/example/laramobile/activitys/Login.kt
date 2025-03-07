@@ -142,7 +142,7 @@ fun LoginScreen(navController: NavController) {
                     password = password,
                     onSuccess = { loginRes ->
 
-                        AppConfig.user = loginRes.user
+                        AppConfig.user = loginRes?.user
 
                         navController.navigate(Screen.Home.route)
                     },

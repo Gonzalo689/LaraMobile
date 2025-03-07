@@ -4,9 +4,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitInstance {
-  private const val BASE_URL = "http://10.0.2.2:8000/"  // Localhost
+//  private const val BASE_URL = "http://10.0.2.2:8000/"  // Localhost
 //    private const val BASE_URL = "https://larabackend.onrender.com/"
-//private const val BASE_URL = "https://0p1x36b4-8000.uks1.devtunnels.ms/"
+private const val BASE_URL = "https://0p1x36b4-8000.uks1.devtunnels.ms/"
 
 
     val retrofit: Retrofit by lazy {

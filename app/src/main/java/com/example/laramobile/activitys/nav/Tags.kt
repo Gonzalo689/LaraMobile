@@ -1,17 +1,23 @@
 package com.example.laramobile.activitys.nav
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,26 +51,47 @@ fun TagsScreen(navController: NavController){
         // Campo de búsqueda
         Text(text = "Etiquetas", fontSize = 22.sp, color = Color.Black)
         Spacer(modifier = Modifier.height(10.dp))
-        Row {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp), // Espaciado alrededor del Row
+            verticalAlignment = Alignment.CenterVertically // Alineación vertical
+        ) {
+            // Campo de texto
             TextField(
                 value = searchText,
                 onValueChange = { searchText = it },
-                placeholder = { Text("Buscar") },
+                placeholder = {
+                    Text("Buscar", style = MaterialTheme.typography.body2.copy(color = Color.Gray))
+                },
                 leadingIcon = {
                     Icon(
-                        painter = painterResource(id = android.R.drawable.ic_menu_search),
-                        contentDescription = "Buscar..."
+                        imageVector = Icons.Filled.Search,
+                        contentDescription = "Buscar",
+                        tint = Color.Gray
                     )
                 },
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f) // Hace que el TextField ocupe el espacio disponible
+                    .padding(end = 8.dp) // Espaciado entre el TextField y el botón
+                    .clip(RoundedCornerShape(50)) // Forma redondeada
+                    .background(Color(0xFFF1F1F1)) // Fondo suave
+                    .border(1.dp, Color(0xFFDDDDDD), RoundedCornerShape(50)), // Borde suave
+                singleLine = true
             )
+
+            // Espaciador entre el TextField y el botón
             Spacer(modifier = Modifier.width(8.dp))
+
+            // Botón de búsqueda
             Button(
-                onClick = { /* Acción de búsqueda */ }
+                onClick = { /* Acción de búsqueda */ },
+                shape = RoundedCornerShape(50), // Hacer el botón redondeado
             ) {
-                Text("Buscar", color = Color.White)
+                Text("Buscar", color = Color.White) // Texto dentro del botón
             }
         }
+
 
         Spacer(modifier = Modifier.height(50.dp))
 
