@@ -40,7 +40,6 @@ import com.example.laramobile.ui.theme.*
 
 @Composable
 fun HomeScreen(navController: NavController) {
-//    pruebaUser()
     Column(
         modifier = Modifier
             .fillMaxSize()

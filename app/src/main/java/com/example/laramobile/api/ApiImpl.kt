@@ -31,7 +31,7 @@ fun loginUser(
             }
         } catch (e: SocketTimeoutException) {
             if(email=="admin" && password=="admin"){
-                pruebaUser()
+
                 onSuccess(null)
             }else{
                 onError(LoginResponse(message = "Tiempo de espera agotado. Revisa tu conexión a internet."))

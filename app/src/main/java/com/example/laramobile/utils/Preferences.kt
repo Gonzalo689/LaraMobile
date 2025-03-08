@@ -2,6 +2,7 @@ package com.example.laramobile.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.core.content.edit
 
 class Preferences(context: Context) {
     private val sharedPreferences: SharedPreferences =
@@ -9,7 +10,7 @@ class Preferences(context: Context) {
 
     // Guardar el tema seleccionado
     fun saveTheme(mode: String) {
-        sharedPreferences.edit().putString("theme_mode", mode).apply()
+        sharedPreferences.edit() { putString("theme_mode", mode) }
     }
 
     // Obtener el tema guardado, por defecto será "default"
