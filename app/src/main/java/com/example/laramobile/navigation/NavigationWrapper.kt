@@ -3,7 +3,6 @@ package com.example.laramobile.navigation
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -15,19 +14,21 @@ import androidx.navigation.compose.rememberNavController
 import com.example.laramobile.activitys.nav.HomeScreen
 import com.example.laramobile.activitys.LoginScreen
 import com.example.laramobile.activitys.SplashScreen
-import com.example.laramobile.activitys.nav.TagsScreen
+import com.example.laramobile.activitys.nav.tag.TagsScreen
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavType
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.navArgument
 import com.example.laramobile.activitys.nav.AudioRecordingScreen
 import com.example.laramobile.activitys.nav.ProfileScreen
+import com.example.laramobile.activitys.nav.tag.AudiosRecordingTagScreen
 import com.example.laramobile.ui.theme.*
 
 @Composable
@@ -60,7 +61,14 @@ fun MainNavigation() {
                 composable(Screen.Home.route) { HomeScreen(navController) }
                 composable(Screen.Tags.route) { TagsScreen(navController) }
                 composable(Screen.Profile.route) { ProfileScreen() }
-                composable(Screen.RecordAudio.route) { AudioRecordingScreen() }
+                composable(Screen.RecordAudio.route) {AudioRecordingScreen() }
+                composable(
+                    Screen.AudiosRecordingTag.route + "/{tag}",
+                    arguments = listOf(navArgument("tag") { type = NavType.StringType })
+                ) { backStackEntry ->
+                    val tag = backStackEntry.arguments?.getString("tag")
+                    AudiosRecordingTagScreen(tag = tag)
+                }
             }
         }
     }

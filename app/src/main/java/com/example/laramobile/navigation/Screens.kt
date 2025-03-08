@@ -27,6 +27,7 @@ sealed class Screen(val route: String,val title: String? = null, val icon: Image
         title = "Record",
         icon = Icons.Default.Phone
     )
+    data object AudiosRecordingTag : Screen("audiosRecordingTag", "RecordTags", Icons.Default.Phone)
     data object SplashScreen : Screen("splash_screen")
     data object Tags : Screen("tags", "Tags", Icons.Default.Home)
 }

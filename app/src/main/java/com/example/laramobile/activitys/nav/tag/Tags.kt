@@ -1,4 +1,4 @@
-package com.example.laramobile.activitys.nav
+package com.example.laramobile.activitys.nav.tag
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -12,25 +12,22 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.laramobile.api.getTagsImpl
-import com.example.laramobile.ui.theme.GreenPrm
+import com.example.laramobile.navigation.Screen
 import com.example.laramobile.ui.theme.Pink80
 
 
@@ -100,7 +97,7 @@ fun TagsScreen(navController: NavController){
         Spacer(modifier = Modifier.height(20.dp))
 
         // cargar Tags
-        GetSylabus()
+        GetSylabus(navController)
 
         Spacer(modifier = Modifier.height(50.dp))
 
@@ -117,7 +114,7 @@ fun TagsScreen(navController: NavController){
 }
 
 @Composable
-fun GetSylabus() {
+fun GetSylabus(navController: NavController) {
     var tagList by remember { mutableStateOf<List<String>>(emptyList()) }
     var isLoading by remember { mutableStateOf(true) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
@@ -154,7 +151,7 @@ fun GetSylabus() {
                     ) {
                         rowItems.forEach { tag ->
                             OutlinedButton(
-                                onClick = {  },
+                                onClick = { navController.navigate("${Screen.AudiosRecordingTag}/$tag") },
                                 shape = RoundedCornerShape(12.dp),
                                 modifier = Modifier
                                     .weight(1f)

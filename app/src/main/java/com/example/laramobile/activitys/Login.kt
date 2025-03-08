@@ -66,12 +66,19 @@ import retrofit2.HttpException
 fun LoginScreen(navController: NavController) {
 //    var email by remember { mutableStateOf("") }
 //    var password by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("cliente@cliente.com") }
-    var password by remember { mutableStateOf("cliente") }
+    var email by remember { mutableStateOf("admin") }
+    var password by remember { mutableStateOf("admin") }
+//    var email by remember { mutableStateOf("cliente@cliente.com") }
+//    var password by remember { mutableStateOf("cliente") }
     var checked by remember { mutableStateOf(true) } // Default false, ponerlo a true para pruebas
     var showError by remember { mutableStateOf<String?>(null) }
+
+    var isLoading by remember { mutableStateOf(false) }
+    var loadingText by remember { mutableStateOf("Iniciando sesión") }
+
     val scrollState = rememberScrollState()
     val coroutineScope = rememberCoroutineScope()
+
 
     Column(
         modifier = Modifier
@@ -134,8 +141,23 @@ fun LoginScreen(navController: NavController) {
 
         Spacer(modifier = Modifier.height(24.dp))
 
+        LaunchedEffect(isLoading) {
+            if (isLoading) {
+                while (true) {
+                    loadingText = "Iniciando sesión"
+                    delay(500)
+                    loadingText = "Iniciando sesión ."
+                    delay(500)
+                    loadingText = "Iniciando sesión .."
+                    delay(500)
+                    loadingText = "Iniciando sesión ..."
+                    delay(500)
+                }
+            }
+        }
         Button(
             onClick = {
+                isLoading = true
                 loginUser(
                     coroutineScope,
                     email = email,
@@ -145,6 +167,7 @@ fun LoginScreen(navController: NavController) {
                         AppConfig.user = loginRes?.user
 
                         navController.navigate(Screen.Home.route)
+                        isLoading = false
                     },
                     onError = { error ->
                         if(email=="admin" && password=="admin"){
@@ -152,6 +175,7 @@ fun LoginScreen(navController: NavController) {
                             navController.navigate(Screen.Home.route)
                         }
                         showError = error.message
+                        isLoading = false
                     }
                 )
             },
@@ -164,7 +188,11 @@ fun LoginScreen(navController: NavController) {
                 disabledContainerColor = Grey
             )
         ) {
-            Text("Iniciar sesión")
+            if (isLoading) {
+                Text(loadingText)
+            } else {
+                Text("Iniciar sesión")
+            }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
