@@ -5,13 +5,11 @@ LARA es una aplicación innovadora diseñada para mejorar la autonomía comunica
 
 ## Funcionalidades
 - Captura y análisis de datos de voz
-- Generación de audios corregidos en tiempo real
 - Interfaz accesible e intuitiva
 
 ## Tecnologías
 - **Kotlin**
 - **Jetpack Compose**
-- **IA y Procesamiento de voz**
 
 ## Más información
 Para más detalles, visita la página web oficial: [LARA Proyecto](https://piafplara.es/)
