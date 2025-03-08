@@ -13,9 +13,6 @@ LARA es una aplicación innovadora diseñada para mejorar la autonomía comunica
 - **Jetpack Compose**
 - **IA y Procesamiento de voz**
 
-## Contribuciones
-¡Estamos abiertos a contribuciones! Si quieres colaborar, abre un pull request o contacta con el equipo.
-
 ## Más información
 Para más detalles, visita la página web oficial: [LARA Proyecto](https://piafplara.es/)
 
