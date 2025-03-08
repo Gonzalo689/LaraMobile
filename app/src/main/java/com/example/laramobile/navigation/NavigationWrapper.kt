@@ -1,6 +1,5 @@
 package com.example.laramobile.navigation
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.NavigationBar
@@ -16,7 +15,6 @@ import com.example.laramobile.activitys.LoginScreen
 import com.example.laramobile.activitys.SplashScreen
 import com.example.laramobile.activitys.nav.tag.TagsScreen
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
@@ -42,19 +40,21 @@ fun MainNavigation() {
 
     Scaffold(
         bottomBar = {
-            if (currentRoute !in hideNavigationScreens) {
-                BottomNavigationBar(navController,currentRoute)
+            val recordTag = currentRoute?.startsWith(Screen.AudiosRecordingTag.route)
+            if (currentRoute !in hideNavigationScreens && recordTag != true) {
+                BottomNavigationBar(navController, currentRoute)
             }
         }
     ) { innerPadding ->
         Box(modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colors.background)
             .padding(innerPadding)
         ) {
             NavHost(
                 navController = navController,
-                startDestination = Screen.SplashScreen.route
+                startDestination = Screen.RecordAudio.route
+//                startDestination = Screen.AudiosRecordingTag.route+"/Prueba1"
+
             ) {
                 composable(Screen.SplashScreen.route) { SplashScreen(navController) }
                 composable(Screen.Login.route) { LoginScreen(navController) }
@@ -66,7 +66,7 @@ fun MainNavigation() {
                     Screen.AudiosRecordingTag.route + "/{tag}",
                     arguments = listOf(navArgument("tag") { type = NavType.StringType })
                 ) { backStackEntry ->
-                    val tag = backStackEntry.arguments?.getString("tag")
+                    val tag = backStackEntry.arguments?.getString("tag")?:""
                     AudiosRecordingTagScreen(tag = tag)
                 }
             }

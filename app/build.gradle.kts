@@ -41,6 +41,11 @@ android {
 }
 
 dependencies {
+    implementation(libs.lottie.compose)
+    implementation(libs.ui)
+    implementation(libs.material3)
+    implementation(libs.lottie)
+    implementation(libs.coil.compose)
     implementation (libs.retrofit)
     implementation (libs.converter.gson)
     implementation (libs.androidx.navigation.compose)

@@ -26,6 +26,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.laramobile.activitys.pruebasylabus
 import com.example.laramobile.api.getTagsImpl
 import com.example.laramobile.navigation.Screen
 import com.example.laramobile.ui.theme.Pink80
@@ -110,6 +111,7 @@ fun TagsScreen(navController: NavController){
         ) {
             Text("Buscar", color = Color.White)
         }
+        Button(onClick = { navController.navigate("${Screen.AudiosRecordingTag}/Prueba1") }) {Text("Botón de prueba", color = Color.White) } // boton de prueba
     }
 }
 
@@ -140,6 +142,7 @@ fun GetSylabus(navController: NavController) {
             ) {
                 Text(text = errorMessage!!, color = Pink80, fontWeight = FontWeight.Bold, fontSize = 20.sp)
             }
+
         }
         else -> {
 

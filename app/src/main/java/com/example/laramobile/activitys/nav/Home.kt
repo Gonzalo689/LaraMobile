@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.laramobile.R
 import com.example.laramobile.activitys.AppConfig
+import com.example.laramobile.activitys.pruebaUser
 import com.example.laramobile.api.getPhrasesImpl
 import com.example.laramobile.navigation.navigateToTags
 import com.example.laramobile.ui.theme.*

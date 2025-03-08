@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import java.io.File
 import java.io.IOException
-
+import com.example.laramobile.R
 import android.media.MediaPlayer
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -33,11 +33,24 @@ import androidx.compose.animation.AnimatedVisibility
 
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import coil.compose.AsyncImage
 
 import com.example.laramobile.utils.CleanUp
 import com.example.laramobile.utils.MediaRecorderWrapper
 import com.example.laramobile.utils.hasAudioPermission
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Icon
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.painterResource
+import com.airbnb.lottie.LottieComposition
+import com.airbnb.lottie.LottieDrawable
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
 
+@Preview
 @Composable
 fun AudioRecordingScreen() {
     var recordText by remember { mutableStateOf("") }
@@ -97,9 +110,10 @@ fun AudioRecordingScreen() {
             style = TextStyle(
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Medium
-            )
+            ),
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+                .padding(bottom = 26.dp, top = 12.dp)
         )
-
         // Text input field
         Box(
             modifier = Modifier
@@ -182,13 +196,14 @@ fun AudioRecordingScreen() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 32.dp),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
+
         ) {
             Box(
                 modifier = Modifier
                     .size(64.dp)
                     .clip(CircleShape)
-                    .border(1.dp, Color.LightGray, CircleShape)
+//                    .border(1.dp, Color.LightGray, CircleShape)
                     .pointerInput(Unit) {
                         detectTapGestures(
                             onPress = {
@@ -202,12 +217,8 @@ fun AudioRecordingScreen() {
                     },
                 contentAlignment = Alignment.Center
             ) {
-                Icon(
-                    imageVector = if (isRecording) Icons.Rounded.Clear else Icons.Rounded.Phone,
-                    contentDescription = if (isRecording) "Detener Grabación" else "Iniciar Grabación",
-                    modifier = Modifier.size(32.dp),
-                    tint = if (isRecording) Color.Red else Color.Gray
-                )
+
+                DisplayGif(isRecording)
             }
         }
 
@@ -215,6 +226,34 @@ fun AudioRecordingScreen() {
         Spacer(modifier = Modifier.height(40.dp))
     }
 }
+
+@Composable
+fun DisplayGif(isRecording: Boolean) {
+    // Cargar la animación Lottie
+    val composition by rememberLottieComposition(
+        spec =  LottieCompositionSpec.RawRes(R.raw.animation_record)
+         // Si usas PNG, simplemente cargarlo como un recurso
+    )
+
+    // Mostrar la animación Lottie o la imagen PNG
+    Box(modifier = Modifier.fillMaxSize()) {
+        if (isRecording) {
+            LottieAnimation(
+                composition = composition,
+                iterations = LottieConstants.IterateForever, // Repite la animación infinitamente
+                modifier = Modifier.align(Alignment.Center).size(60.dp) // Centra la animación
+            )
+        } else {
+            // Si no está grabando, mostrar un PNG estático
+            Image(
+                painter = painterResource(id = R.drawable.microphone_icon), // Ruta a tu imagen PNG
+                contentDescription = "Microphone Icon",
+                modifier = Modifier.align(Alignment.Center).size(48.dp) // Centra la imagen
+            )
+        }
+    }
+}
+
 
 
 
