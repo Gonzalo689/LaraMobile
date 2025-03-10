@@ -30,7 +30,6 @@ import java.io.File
 import java.io.IOException
 import com.example.laramobile.R
 import android.media.MediaPlayer
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
@@ -76,14 +75,8 @@ fun AudioRecordingScreen() {
             permissionGranted = granted
         }
     )
+    RequestAudioPermission(context = context)
 
-    RequestAudioPermission(context = context) {
-        // Si el permiso fue concedido, puedes continuar con la grabación
-        Log.d("AudioPermission", "Permiso concedido, puedes grabar audio.")
-    }
-
-
-    Log.d("TAG", "Test")
     if (isRecording) {
         if (permissionGranted) {
             try {

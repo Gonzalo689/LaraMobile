@@ -52,7 +52,7 @@ fun MainNavigation() {
         ) {
             NavHost(
                 navController = navController,
-                startDestination = Screen.RecordAudio.route
+                startDestination = Screen.SplashScreen.route
 //                startDestination = Screen.AudiosRecordingTag.route+"/Prueba1"
 
             ) {

@@ -135,16 +135,14 @@ fun CleanUp(recorder: MediaRecorderWrapper, mediaPlayer: MediaPlayer?, audioFile
 @Composable
 fun RequestAudioPermission(
     context: Context,
-    onPermissionGranted: () -> Unit
+
 ) {
     val showDialog = remember { mutableStateOf(false) }
     val activity = context as? Activity
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
     ) { isGranted ->
-        if (isGranted) {
-            onPermissionGranted() // El permiso fue concedido
-        } else {
+        if (!isGranted) {
             // El permiso fue denegado
             if (activity != null && !ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.RECORD_AUDIO)) {
                 // El usuario marcó "No volver a preguntar"
@@ -157,8 +155,6 @@ fun RequestAudioPermission(
     LaunchedEffect(Unit) {
         if (!hasAudioPermission(context)) {
             permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
-        } else {
-            onPermissionGranted()
         }
     }
 
