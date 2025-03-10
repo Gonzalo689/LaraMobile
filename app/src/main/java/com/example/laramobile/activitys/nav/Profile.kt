@@ -40,7 +40,9 @@ import com.example.laramobile.utils.Preferences
 @Preview
 @Composable
 fun ProfileScreen() {
+    //TODO CARGAR  DATOS DE PRUEBA USUARIO QUITAR ESTA LINEA
     pruebaUser()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -102,7 +104,7 @@ fun ProfileScreen() {
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = user!!.mail ?:"Email",
+                text = user!!.mail,
                 fontSize = 16.sp ,
                 color = Color.Gray
             )

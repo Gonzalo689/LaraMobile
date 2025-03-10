@@ -1,5 +1,8 @@
 package com.example.laramobile.activitys.nav
 import android.Manifest
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
@@ -27,28 +30,24 @@ import java.io.File
 import java.io.IOException
 import com.example.laramobile.R
 import android.media.MediaPlayer
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
-
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import coil.compose.AsyncImage
-
 import com.example.laramobile.utils.CleanUp
 import com.example.laramobile.utils.MediaRecorderWrapper
 import com.example.laramobile.utils.hasAudioPermission
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
-import com.airbnb.lottie.LottieComposition
-import com.airbnb.lottie.LottieDrawable
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
+import com.example.laramobile.utils.RequestAudioPermission
 
 @Preview
 @Composable
@@ -68,8 +67,9 @@ fun AudioRecordingScreen() {
     var hasRecording by remember { mutableStateOf(File(audioFilePath).exists()) }
 
     // Comprobar permisos de grabación al iniciar la pantalla
+    var permissionGranted by remember { mutableStateOf(hasAudioPermission(context)) }
 
-    var permissionGranted = hasAudioPermission(context)
+    //recordar el resultado
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
         onResult = { granted ->
@@ -77,6 +77,13 @@ fun AudioRecordingScreen() {
         }
     )
 
+    RequestAudioPermission(context = context) {
+        // Si el permiso fue concedido, puedes continuar con la grabación
+        Log.d("AudioPermission", "Permiso concedido, puedes grabar audio.")
+    }
+
+
+    Log.d("TAG", "Test")
     if (isRecording) {
         if (permissionGranted) {
             try {
@@ -85,9 +92,10 @@ fun AudioRecordingScreen() {
                 isRecording = false
             }
         } else {
-            isRecording = false
+            isRecording = false  // Detener la grabación para evitar errores
 
             permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+
         }
     } else if (recorder.isRecording) {
         recorder.stop()
@@ -203,15 +211,11 @@ fun AudioRecordingScreen() {
                 modifier = Modifier
                     .size(64.dp)
                     .clip(CircleShape)
-//                    .border(1.dp, Color.LightGray, CircleShape)
+                    .border(1.dp, Color.LightGray, CircleShape)
                     .pointerInput(Unit) {
                         detectTapGestures(
                             onPress = {
-                                if (isRecording) {
-                                    isRecording = false
-                                } else {
-                                    isRecording = true
-                                }
+                                isRecording = !isRecording
                             }
                         )
                     },

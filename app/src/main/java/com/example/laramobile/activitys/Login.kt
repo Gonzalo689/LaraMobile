@@ -64,6 +64,7 @@ import retrofit2.HttpException
 
 @Composable
 fun LoginScreen(navController: NavController) {
+    // TODO Quedar iniciar email y password en vacío borrar lo demas y el check en false
 //    var email by remember { mutableStateOf("") }
 //    var password by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("admin") }
@@ -170,6 +171,7 @@ fun LoginScreen(navController: NavController) {
                         isLoading = false
                     },
                     onError = { error ->
+                        // TODO con admin admin solo para pruebas
                         if(email=="admin" && password=="admin"){
                             pruebaUser()
                             navController.navigate(Screen.Home.route)
@@ -204,7 +206,7 @@ fun LoginScreen(navController: NavController) {
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        TextButton(onClick = { /* Lógica para recuperar contraseña */ }) {
+        TextButton(onClick = { /* TODO Lógica para recuperar contraseña */ }) {
             Text(
                 "¿Olvidaste la contraseña?",
                 fontSize = 16.sp,

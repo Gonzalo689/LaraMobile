@@ -60,9 +60,9 @@ fun pruebasylabus(): List<Sylabus>{
     var listSylabus = mutableListOf<Sylabus>()
     var sylabus = Sylabus(texto = "hola que tal", creador = null,
         tags = listOf("Prueba1", "tag2"), audios = null, fecha_creacion = null)
-    var sylabus2 = Sylabus(texto = "hola que tal", creador = null,
+    var sylabus2 = Sylabus(texto = "esto es", creador = null,
         tags = listOf("Prueba1", "tag3"), audios = null, fecha_creacion = null)
-    var sylabus3 = Sylabus(texto = "hola que tal", creador = null,
+    var sylabus3 = Sylabus(texto = "una prueba", creador = null,
         tags = listOf("Prueba1", "tag4"), audios = null, fecha_creacion = null)
     var sylabus4 = Sylabus(texto = "hola que tal", creador = null,
         tags = listOf("Prueba2", "tag5"), audios = null, fecha_creacion = null)
@@ -70,6 +70,19 @@ fun pruebasylabus(): List<Sylabus>{
     listSylabus.addAll(listOf(sylabus, sylabus2, sylabus3, sylabus4))
 
     return listSylabus
+}
+fun obtenerTextosUnicos(): List<String> {
+    return pruebasylabus()
+        .mapNotNull { it.texto }
+        .toSet()
+        .toList()
+}
+fun obtenerTagsUnicos(): List<String> {
+    return pruebasylabus()
+        .mapNotNull { it.tags }
+        .flatMap { it }
+        .toSet()
+        .toList()
 }
 
 

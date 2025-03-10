@@ -26,6 +26,8 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.laramobile.activitys.obtenerTagsUnicos
+import com.example.laramobile.activitys.obtenerTextosUnicos
 import com.example.laramobile.activitys.pruebasylabus
 import com.example.laramobile.api.getTagsImpl
 import com.example.laramobile.navigation.Screen
@@ -111,7 +113,6 @@ fun TagsScreen(navController: NavController){
         ) {
             Text("Buscar", color = Color.White)
         }
-        Button(onClick = { navController.navigate("${Screen.AudiosRecordingTag}/Prueba1") }) {Text("Botón de prueba", color = Color.White) } // boton de prueba
     }
 }
 
@@ -123,13 +124,17 @@ fun GetSylabus(navController: NavController) {
     val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
-        getTagsImpl(coroutineScope, { tags ->
-            tagList = tags
-            isLoading = false
-        }, { error ->
-            errorMessage = error
-            isLoading = false
-        })
+        //TODO Método correcto para cargar frases
+//        getTagsImpl(coroutineScope, { tags ->
+//            tagList = tags
+//            isLoading = false
+//        }, { error ->
+//            errorMessage = error
+//            isLoading = false
+//
+//        })
+        //TODO prueba de frases CUIDAOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+        errorMessage = null
     }
     when {
         isLoading -> {
@@ -147,6 +152,10 @@ fun GetSylabus(navController: NavController) {
         else -> {
 
             Column {
+                //TODO prueba de frases CUIDAOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+                tagList = obtenerTagsUnicos() // TODO QUITAR ESTA PARTE
+
+
                 tagList.chunked(2).forEach { rowItems ->
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -172,5 +181,6 @@ fun GetSylabus(navController: NavController) {
         }
     }
 }
+
 
 

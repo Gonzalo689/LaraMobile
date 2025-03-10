@@ -33,7 +33,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.laramobile.R
 import com.example.laramobile.activitys.AppConfig
+import com.example.laramobile.activitys.obtenerTextosUnicos
 import com.example.laramobile.activitys.pruebaUser
+import com.example.laramobile.activitys.pruebasylabus
 import com.example.laramobile.api.getPhrasesImpl
 import com.example.laramobile.navigation.navigateToTags
 import com.example.laramobile.ui.theme.*
@@ -92,8 +94,11 @@ fun GetPhrases(navController : NavController) {
             })
         }
         if (tagList.isEmpty()) {
-            errorMessage = "No se encontraron frases"
+//            errorMessage = "No se encontraron frases"
             isLoading = false
+
+            //TODO prueba de frases CUIDAOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+            errorMessage = null
         }
     }
     when {
@@ -117,6 +122,9 @@ fun GetPhrases(navController : NavController) {
         }
         else -> {
             Column {
+                //TODO prueba de frases CUIDAOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+                tagList = obtenerTextosUnicos() // TODO QUITAR ESTA PARTE
+
                 tagList.chunked(1).forEach { rowItems ->
                     Row(
                         modifier = Modifier.fillMaxWidth(),
