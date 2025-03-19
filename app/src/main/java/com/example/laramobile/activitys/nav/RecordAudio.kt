@@ -33,20 +33,31 @@ import android.media.MediaPlayer
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.laramobile.utils.CleanUp
 import com.example.laramobile.utils.MediaRecorderWrapper
 import com.example.laramobile.utils.hasAudioPermission
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.res.painterResource
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
+import com.example.laramobile.ui.theme.GreenPrm
 import com.example.laramobile.utils.RequestAudioPermission
+import kotlinx.coroutines.delay
 
 @Preview
 @Composable
@@ -155,39 +166,43 @@ fun AudioRecordingScreen() {
                 textAlign = TextAlign.Center
             )
         }
-        AnimatedVisibility (!isRecording && hasRecording) {
-            Text(
-                text = "Audio grabado",
-                color = Color(0xFF4CAF8D),
-                modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
-                textAlign = TextAlign.Center
-            )
-
-            // Reproductor de audio
-            Box(modifier = Modifier.fillMaxWidth().padding(top = 16.dp), contentAlignment = Alignment.Center) {
-                Button(
-                    onClick = {
-                        if (isPlaying) {
-                            mediaPlayer?.stop()
-                            mediaPlayer?.release()
-                            mediaPlayer = null
-                        } else {
-                            mediaPlayer = MediaPlayer().apply {
-                                setDataSource(audioFilePath)
-                                prepare()
-                                start()
-                                setOnCompletionListener {
-                                    isPlaying = false
-                                }
-                            }
-                        }
-                        isPlaying = !isPlaying
-                    }
-                ) {
-                    Text(text = if (isPlaying) "Detener Reproducción" else "Reproducir Audio")
-                }
-            }
+        AnimatedVisibility(!isRecording && hasRecording) {
+            AudioMessageBubble(audioFilePath = audioFilePath)
         }
+
+//        AnimatedVisibility (!isRecording && hasRecording) {
+//            Text(
+//                text = "Audio grabado",
+//                color = Color(0xFF4CAF8D),
+//                modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
+//                textAlign = TextAlign.Center
+//            )
+//
+//            // Reproductor de audio
+//            Box(modifier = Modifier.fillMaxWidth().padding(top = 16.dp), contentAlignment = Alignment.Center) {
+//                Button(
+//                    onClick = {
+//                        if (isPlaying) {
+//                            mediaPlayer?.stop()
+//                            mediaPlayer?.release()
+//                            mediaPlayer = null
+//                        } else {
+//                            mediaPlayer = MediaPlayer().apply {
+//                                setDataSource(audioFilePath)
+//                                prepare()
+//                                start()
+//                                setOnCompletionListener {
+//                                    isPlaying = false
+//                                }
+//                            }
+//                        }
+//                        isPlaying = !isPlaying
+//                    }
+//                ) {
+//                    Text(text = if (isPlaying) "Detener Reproducción" else "Reproducir Audio")
+//                }
+//            }
+//        }
 
         // Spacer
         Spacer(modifier = Modifier.height(80.dp))
@@ -250,6 +265,110 @@ fun DisplayGif(isRecording: Boolean) {
         }
     }
 }
+@Composable
+fun AudioMessageBubble(
+    audioFilePath: String,
+    modifier: Modifier = Modifier
+) {
+    var isPlaying by remember { mutableStateOf(false) }
+    var mediaPlayer by remember { mutableStateOf<MediaPlayer?>(null) }
+    var duration by remember { mutableIntStateOf(0) }
+
+    // Obtener duración del audio
+    LaunchedEffect(audioFilePath) {
+        mediaPlayer = MediaPlayer().apply {
+            setDataSource(audioFilePath)
+            prepare()
+            duration = this.duration / 1000
+        }
+    }
+
+    Card(
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = GreenPrm),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Botón Play/Pausa
+            IconButton(
+                onClick = {
+                    if (isPlaying) {
+                        mediaPlayer?.stop()
+                        mediaPlayer?.release()
+                        mediaPlayer = null
+                    } else {
+                        mediaPlayer = MediaPlayer().apply {
+                            setDataSource(audioFilePath)
+                            prepare()
+                            start()
+                            setOnCompletionListener { isPlaying = false }
+                        }
+                    }
+                    isPlaying = !isPlaying
+                }
+            ) {
+                Icon(
+                    imageVector = if (isPlaying) Icons.Rounded.Clear else Icons.Rounded.PlayArrow,
+                    contentDescription = "Play/Pause",
+                    tint = Color.White
+                )
+            }
+
+            // Onda de audio
+            AudioWaveform(isPlaying)
+            Spacer(modifier = Modifier.weight(1f))
+
+            // Duración del audio
+            Text(
+                text = "${duration}s",
+                color = Color.White,
+                fontSize = 14.sp
+            )
+
+        }
+    }
+}
+
+@Composable
+fun AudioWaveform(isPlaying: Boolean) {
+    val barCount = 32
+    val barHeights = remember { List(barCount) { mutableFloatStateOf((5..20).random().toFloat()) } }
+
+    LaunchedEffect(isPlaying) {
+        while (isPlaying) {
+            barHeights.forEachIndexed { index, height ->
+                height.floatValue = (5..20).random().toFloat()
+            }
+            delay(200) // Velocidad de cambio de las barras
+        }
+    }
+
+    Row(
+        modifier = Modifier
+            .height(24.dp)
+            .width(150.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        barHeights.forEach { height ->
+            Box(
+                modifier = Modifier
+                    .width(4.dp)
+                    .height(height.floatValue.dp)
+                    .background(Color.White, shape = RoundedCornerShape(2.dp))
+                    .padding(horizontal = 2.dp)
+            )
+            Spacer(modifier = Modifier.width(3.dp))
+        }
+    }
+}
+
 
 
 

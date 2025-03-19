@@ -99,8 +99,9 @@ fun TagsScreen(navController: NavController){
         Text(text = "Menos usadas", fontSize = 18.sp, color = Color.Black)
         Spacer(modifier = Modifier.height(20.dp))
 
-        // cargar Tags
-        GetSylabus(navController)
+        // cargar Tags TODO CORRECTO EL PRIMERO
+//        GetSylabus(navController)
+        GetSylabus2(navController)
 
         Spacer(modifier = Modifier.height(50.dp))
 
@@ -124,17 +125,14 @@ fun GetSylabus(navController: NavController) {
     val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
-        //TODO Método correcto para cargar frases
-//        getTagsImpl(coroutineScope, { tags ->
-//            tagList = tags
-//            isLoading = false
-//        }, { error ->
-//            errorMessage = error
-//            isLoading = false
-//
-//        })
-        //TODO prueba de frases CUIDAOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
-        errorMessage = null
+        getTagsImpl(coroutineScope, { tags ->
+            tagList = tags
+            isLoading = false
+        }, { error ->
+            errorMessage = error
+            isLoading = false
+
+        })
     }
     when {
         isLoading -> {
@@ -150,12 +148,7 @@ fun GetSylabus(navController: NavController) {
 
         }
         else -> {
-
             Column {
-                //TODO prueba de frases CUIDAOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
-                tagList = obtenerTagsUnicos() // TODO QUITAR ESTA PARTE
-
-
                 tagList.chunked(2).forEach { rowItems ->
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -181,6 +174,38 @@ fun GetSylabus(navController: NavController) {
         }
     }
 }
+@Composable
+fun GetSylabus2(navController: NavController) {
+    var tagList by remember { mutableStateOf<List<String>>(emptyList()) }
+
+    Column {
+        tagList = obtenerTagsUnicos() // TODO QUITAR ESTA PARTE
+
+        tagList.chunked(2).forEach { rowItems ->
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                rowItems.forEach { tag ->
+                    OutlinedButton(
+                        onClick = { navController.navigate("${Screen.AudiosRecordingTag}/$tag") },
+                        shape = RoundedCornerShape(12.dp),
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(4.dp)
+                    ) {
+                        Text(tag)
+                    }
+                }
+                repeat(2 - rowItems.size) {
+                    Spacer(modifier = Modifier.weight(1f))
+                }
+            }
+        }
+    }
+}
+
+
 
 
 
